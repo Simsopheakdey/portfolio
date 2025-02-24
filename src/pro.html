@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+    </head>
+
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome for Icons -->
+    <script src="https://kit.fontawesome.com/YOUR_KIT_CODE.js" crossorigin="anonymous"></script>
+
+
+
+<body class="bg-gray-400 text-black transition-colors duration-300" id="theme">
+    <header class="flex justify-between items-center px-10 py-10">
+        <a class="text-neon text-4xl font-bold font-sans" href="#">SIM<span id="name-color">SOPHEAKDEY</span></a>
+        <nav>
+            <ul class="flex gap-10 text-xl text-white">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div id="darkModeToggle" class="cursor-pointer text-3xl">
+            <i id="theme-icon" class="fas fa-sun text-yellow-500"></i>
+        </div>
+    </header>
+
+    <section>
+        <div class="flex justify-around pb-48 pt-40">
+            <div class="pt-10">
+                <h2 class="text-4xl py-4">Hello, I'm</h2>
+                <h1 class="text-6xl">Sim Sopheakdey</h1>
+                <h2 class="text-4xl py-2">
+                    And I'm a <span class="text-neon" id="typing"></span>
+                    <span class="cursor"></span>
+                </h2>
+                <p class="text-xl py-4">
+                    Hi! I'm Sim Sopheakdey, a passionate Front-End Web Developer dedicated to creating modern,
+                    <br>responsive, and interactive web experiences.
+                    <br>With HTML, CSS, JavaScript, and frameworks like React.js and Tailwind CSS,
+                    <br>I specialize in turning design concepts into seamless, user-friendly websites.
+                </p>
+                <button class="bg-neon text-black px-10 py-3 rounded-full">
+                    Download CV
+                </button>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-0 w-[450px] h-[450px] rounded-full animate-glow"></div>
+                <div class="relative w-[450px] h-[450px] rounded-full border-[6px] border-neon shadow-lg">
+                    <img class="w-[400px] h-[400px] ml-5 mt-8 rounded-full" src="image/Dog.jpg" alt="logo" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="darkModeToggle" class="cursor-pointer text-3xl">
+        <i id="theme-icon" class="fas fa-sun text-yellow-500"></i>
+    </div>
+
+
+    <script src="pro.js"></script>
+</body>
+
+</html>
