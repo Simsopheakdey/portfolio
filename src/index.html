@@ -29,6 +29,9 @@
                         'flip': 'flip 0.6s ease-in-out',
                         'scale-in': 'scaleIn 0.5s ease-out',
                         'rotate-y': 'rotateY 0.6s ease-in-out',
+                        'mobile-float': 'mobileFloat 4s ease-in-out infinite',
+                        'mobile-pulse': 'mobilePulse 2s ease-in-out infinite',
+                        'mobile-bounce': 'mobileBounce 2s ease-in-out infinite',
                     },
                     backgroundSize: {
                         '300%': '300%',
@@ -42,6 +45,12 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
     <style>
+        /* Force animations on mobile */
+        * {
+            -webkit-animation-play-state: running !important;
+            animation-play-state: running !important;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -70,6 +79,22 @@
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
+        }
+
+        /* Mobile-optimized animations */
+        @keyframes mobileFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+        }
+
+        @keyframes mobilePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes mobileBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
         @keyframes glow {
@@ -109,7 +134,7 @@
             to { transform: rotateY(360deg); }
         }
 
-        /* Particle Animation */
+        /* Particle Animation - Simplified for mobile */
         .particles {
             position: absolute;
             top: 0;
@@ -125,6 +150,7 @@
             background: linear-gradient(45deg, #3b82f6, #8b5cf6);
             border-radius: 50%;
             animation: particleFloat 15s infinite linear;
+            will-change: transform;
         }
         
         @keyframes particleFloat {
@@ -144,80 +170,68 @@
             }
         }
 
-        /* Glitch Effect */
-        .glitch {
-            position: relative;
-            color: white;
-            font-size: 4rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            animation: glitch 2s infinite;
-        }
-        
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .glitch::before {
-            animation: glitch-1 0.5s infinite;
-            color: #ff0000;
-            z-index: -1;
-        }
-        
-        .glitch::after {
-            animation: glitch-2 0.5s infinite;
-            color: #00ff00;
-            z-index: -2;
-        }
-        
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-        }
-        
-        @keyframes glitch-1 {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(2px, -2px); }
-            40% { transform: translate(-2px, 2px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(2px, 2px); }
-        }
-        
-        @keyframes glitch-2 {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, -2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(-2px, 2px); }
+        /* Mobile-specific particle animation */
+        @media (max-width: 768px) {
+            .particle {
+                animation: mobileParticleFloat 10s infinite linear;
+            }
         }
 
-        /* Typewriter Effect */
+        @keyframes mobileParticleFloat {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        /* Typewriter Effect - Mobile optimized */
         .typewriter {
             overflow: hidden;
             border-right: 3px solid #3b82f6;
             white-space: nowrap;
             margin: 0 auto;
             animation: typewriter 4s steps(40) 1s forwards, blink 1s infinite;
+            will-change: width;
         }
 
-        /* 3D Card Effect */
+        /* Mobile typewriter */
+        @media (max-width: 768px) {
+            .typewriter {
+                animation: mobileTypewriter 3s steps(20) 0.5s forwards, blink 1s infinite;
+            }
+        }
+
+        @keyframes mobileTypewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* 3D Card Effect - Reduced for mobile */
         .card-3d {
             perspective: 1000px;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.3s ease;
+            will-change: transform;
         }
         
         .card-3d:hover {
-            transform: rotateY(10deg) rotateX(10deg);
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+
+        @media (max-width: 768px) {
+            .card-3d:active {
+                transform: scale(0.98);
+            }
         }
 
         /* Gradient Background Animation */
@@ -225,6 +239,7 @@
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
+            will-change: background-position;
         }
 
         /* Morphing Button */
@@ -232,6 +247,7 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            will-change: transform;
         }
         
         .morph-btn::before {
@@ -245,7 +261,8 @@
             transition: left 0.5s;
         }
         
-        .morph-btn:hover::before {
+        .morph-btn:hover::before,
+        .morph-btn:active::before {
             left: 100%;
         }
 
@@ -253,6 +270,7 @@
         .skill-bar-glow {
             position: relative;
             overflow: hidden;
+            will-change: width;
         }
         
         .skill-bar-glow::after {
@@ -271,7 +289,7 @@
             100% { left: 100%; }
         }
 
-        /* Mouse Trail */
+        /* Mouse Trail - Disabled on mobile */
         .mouse-trail {
             position: fixed;
             width: 20px;
@@ -281,12 +299,13 @@
             pointer-events: none;
             z-index: 9999;
             transition: transform 0.1s ease-out;
+            display: none;
         }
 
-        /* Parallax */
-        .parallax {
-            transform: translateZ(0);
-            transition: transform 0.1s ease-out;
+        @media (min-width: 769px) {
+            .mouse-trail {
+                display: block;
+            }
         }
 
         /* Loading Animation */
@@ -324,6 +343,7 @@
             opacity: 0;
             transform: translateY(50px);
             transition: all 0.8s ease-out;
+            will-change: opacity, transform;
         }
         
         .animate-on-scroll.animated {
@@ -331,7 +351,14 @@
             transform: translateY(0);
         }
 
-        /* Matrix Rain Effect */
+        /* Mobile-specific scroll animations */
+        @media (max-width: 768px) {
+            .animate-on-scroll {
+                transition: all 0.6s ease-out;
+            }
+        }
+
+        /* Matrix Rain Effect - Simplified for mobile */
         .matrix-rain {
             position: absolute;
             top: 0;
@@ -348,6 +375,7 @@
             font-family: 'Courier New', monospace;
             font-size: 14px;
             animation: matrixFall 3s linear infinite;
+            will-change: transform;
         }
         
         @keyframes matrixFall {
@@ -358,6 +386,91 @@
             100% {
                 transform: translateY(100vh);
                 opacity: 0;
+            }
+        }
+
+        /* Mobile matrix effect */
+        @media (max-width: 768px) {
+            .matrix-char {
+                font-size: 12px;
+                animation: mobileMatrixFall 2s linear infinite;
+            }
+        }
+
+        @keyframes mobileMatrixFall {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Force hardware acceleration on mobile */
+        .animate-float,
+        .animate-pulse,
+        .animate-bounce-slow,
+        .animate-glow,
+        .skill-bar,
+        .particle,
+        .matrix-char {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform;
+        }
+
+        /* Mobile-specific optimizations */
+        @media (max-width: 768px) {
+            .animate-float {
+                animation: mobileFloat 4s ease-in-out infinite;
+            }
+            
+            .animate-pulse-slow {
+                animation: mobilePulse 3s ease-in-out infinite;
+            }
+            
+            .animate-bounce-slow {
+                animation: mobileBounce 2s ease-in-out infinite;
+            }
+
+            /* Reduce particle count on mobile */
+            .particles {
+                opacity: 0.7;
+            }
+
+            /* Simplify matrix effect on mobile */
+            .matrix-rain {
+                opacity: 0.3;
+            }
+        }
+
+        /* Touch-friendly hover effects */
+        @media (hover: none) and (pointer: coarse) {
+            .card-3d:active {
+                transform: scale(0.95);
+            }
+            
+            .morph-btn:active {
+                transform: scale(0.95);
+            }
+            
+            .skill-card:active {
+                transform: scale(0.98);
+            }
+        }
+
+        /* Ensure animations work on iOS */
+        @supports (-webkit-appearance: none) {
+            .animate-on-scroll,
+            .animate-float,
+            .animate-pulse-slow,
+            .animate-bounce-slow {
+                -webkit-animation-fill-mode: both;
+                animation-fill-mode: both;
             }
         }
     </style>
@@ -386,7 +499,7 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md hover:bg-slate-100 transition-all duration-300 transform hover:scale-110" aria-label="Toggle menu">
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md hover:bg-slate-100 transition-all duration-300 transform hover:scale-110 active:scale-95" aria-label="Toggle menu">
                     <i data-lucide="menu" class="w-6 h-6 transition-transform duration-300" id="menu-icon"></i>
                     <i data-lucide="x" class="w-6 h-6 hidden transition-transform duration-300" id="close-icon"></i>
                 </button>
@@ -395,11 +508,11 @@
             <!-- Mobile Navigation Menu -->
             <div id="mobile-menu" class="md:hidden absolute top-full left-0 right-0 bg-white border-b shadow-lg hidden">
                 <div class="flex flex-col py-4">
-                    <a href="#home" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2">Home</a>
-                    <a href="#about" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2">About</a>
-                    <a href="#skills" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2">Skills</a>
-                    <a href="#projects" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2">Projects</a>
-                    <a href="#contact" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2">Contact</a>
+                    <a href="#home" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2 active:bg-slate-100">Home</a>
+                    <a href="#about" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2 active:bg-slate-100">About</a>
+                    <a href="#skills" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2 active:bg-slate-100">Skills</a>
+                    <a href="#projects" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2 active:bg-slate-100">Projects</a>
+                    <a href="#contact" class="mobile-nav-link px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-300 transform hover:translate-x-2 active:bg-slate-100">Contact</a>
                 </div>
             </div>
         </div>
@@ -417,7 +530,7 @@
                     <div class="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 sm:border-8 border-white shadow-2xl mx-auto animate-float">
                         <img src="/src/photo_2025-07-09_12-19-57.jpg" 
                              alt="Professional headshot of web developer" 
-                             class="object-cover w-full h-full transition-transform duration-500 hover:scale-110">
+                             class="object-cover w-full h-full transition-transform duration-500 hover:scale-110 active:scale-105">
                     </div>
                     <div class="absolute -bottom-2 -right-2 sm:-bottom-4 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center animate-bounce-slow">
                         <span class="text-white font-bold text-sm sm:text-base lg:text-lg animate-pulse">👋</span>
@@ -436,10 +549,10 @@
                         Passionate about creating beautiful, functional, and user-friendly web experiences using modern technologies.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 sm:gap-4 justify-center items-center">
-                        <button class="morph-btn w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 text-sm sm:text-base transform hover:scale-105 hover:shadow-lg animate-glow">
+                        <button class="morph-btn w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 active:from-blue-800 active:to-purple-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 text-sm sm:text-base transform hover:scale-105 active:scale-95 hover:shadow-lg animate-glow">
                             View My Work
                         </button>
-                        <button class="morph-btn w-full sm:w-auto border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium py-3 px-6 rounded-lg transition-all duration-300 text-sm sm:text-base transform hover:scale-105 hover:shadow-lg">
+                        <button class="morph-btn w-full sm:w-auto border border-slate-300 text-slate-700 hover:bg-slate-50 active:bg-slate-100 font-medium py-3 px-6 rounded-lg transition-all duration-300 text-sm sm:text-base transform hover:scale-105 active:scale-95 hover:shadow-lg">
                             Download CV
                         </button>
                     </div>
@@ -469,11 +582,11 @@
                     </p>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center p-3 sm:p-4 bg-slate-50 rounded-lg animate-scale-in transform hover:scale-105 transition-transform duration-300">
+                        <div class="text-center p-3 sm:p-4 bg-slate-50 rounded-lg animate-scale-in transform hover:scale-105 active:scale-95 transition-transform duration-300">
                             <h4 class="text-xl sm:text-2xl font-bold text-blue-600 animate-pulse-slow">50+</h4>
                             <p class="text-slate-600 text-xs sm:text-sm">Projects Completed</p>
                         </div>
-                        <div class="text-center p-3 sm:p-4 bg-slate-50 rounded-lg animate-scale-in transform hover:scale-105 transition-transform duration-300">
+                        <div class="text-center p-3 sm:p-4 bg-slate-50 rounded-lg animate-scale-in transform hover:scale-105 active:scale-95 transition-transform duration-300">
                             <h4 class="text-xl sm:text-2xl font-bold text-purple-600 animate-pulse-slow">3+</h4>
                             <p class="text-slate-600 text-xs sm:text-sm">Years Experience</p>
                         </div>
@@ -481,7 +594,7 @@
                 </div>
 
                 <div class="space-y-4 sm:space-y-6 order-1 lg:order-2 animate-on-scroll">
-                    <div class="card-3d bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2">
+                    <div class="card-3d bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl active:shadow-lg transition-all duration-500 transform hover:-translate-y-2 active:-translate-y-1">
                         <div class="p-4 sm:p-6 pb-3">
                             <h4 class="flex items-center text-base sm:text-lg font-semibold text-slate-800 mb-3">
                                 <span class="mr-2 animate-spin-slow">🎯</span>
@@ -493,7 +606,7 @@
                         </div>
                     </div>
 
-                    <div class="card-3d bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2">
+                    <div class="card-3d bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl active:shadow-lg transition-all duration-500 transform hover:-translate-y-2 active:-translate-y-1">
                         <div class="p-4 sm:p-6 pb-3">
                             <h4 class="flex items-center text-base sm:text-lg font-semibold text-slate-800 mb-3">
                                 <span class="mr-2 animate-bounce-slow">💡</span>
@@ -505,7 +618,7 @@
                         </div>
                     </div>
 
-                    <div class="card-3d bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2">
+                    <div class="card-3d bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl active:shadow-lg transition-all duration-500 transform hover:-translate-y-2 active:-translate-y-1">
                         <div class="p-4 sm:p-6 pb-3">
                             <h4 class="flex items-center text-base sm:text-lg font-semibold text-slate-800 mb-3">
                                 <span class="mr-2 animate-pulse">🚀</span>
@@ -533,7 +646,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <!-- HTML Skill -->
-                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1 animate-on-scroll">
+                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-500 transform hover:scale-105 active:scale-95 hover:rotate-1 animate-on-scroll">
                     <div class="p-4 sm:p-6 pb-3">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-base sm:text-lg font-semibold text-white flex items-center">
@@ -549,7 +662,7 @@
                 </div>
 
                 <!-- CSS Skill -->
-                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1 animate-on-scroll">
+                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-500 transform hover:scale-105 active:scale-95 hover:rotate-1 animate-on-scroll">
                     <div class="p-4 sm:p-6 pb-3">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-base sm:text-lg font-semibold text-white flex items-center">
@@ -565,7 +678,7 @@
                 </div>
 
                 <!-- Bootstrap Skill -->
-                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1 animate-on-scroll">
+                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-500 transform hover:scale-105 active:scale-95 hover:rotate-1 animate-on-scroll">
                     <div class="p-4 sm:p-6 pb-3">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-base sm:text-lg font-semibold text-white flex items-center">
@@ -581,7 +694,7 @@
                 </div>
 
                 <!-- JavaScript Skill -->
-                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1 animate-on-scroll">
+                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-500 transform hover:scale-105 active:scale-95 hover:rotate-1 animate-on-scroll">
                     <div class="p-4 sm:p-6 pb-3">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-base sm:text-lg font-semibold text-white flex items-center">
@@ -597,7 +710,7 @@
                 </div>
 
                 <!-- React Skill -->
-                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1 animate-on-scroll">
+                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-500 transform hover:scale-105 active:scale-95 hover:rotate-1 animate-on-scroll">
                     <div class="p-4 sm:p-6 pb-3">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-base sm:text-lg font-semibold text-white flex items-center">
@@ -613,7 +726,7 @@
                 </div>
 
                 <!-- Vue.js Skill -->
-                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1 animate-on-scroll">
+                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-500 transform hover:scale-105 active:scale-95 hover:rotate-1 animate-on-scroll">
                     <div class="p-4 sm:p-6 pb-3">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-base sm:text-lg font-semibold text-white flex items-center">
@@ -629,7 +742,7 @@
                 </div>
 
                 <!-- Tailwind CSS Skill -->
-                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1 animate-on-scroll">
+                <div class="skill-card bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-500 transform hover:scale-105 active:scale-95 hover:rotate-1 animate-on-scroll">
                     <div class="p-4 sm:p-6 pb-3">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-base sm:text-lg font-semibold text-white flex items-center">
@@ -659,67 +772,67 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 <!-- Project 1 -->
-                <div class="project-card bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-rotate-1 animate-on-scroll">
+                <div class="project-card bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-2xl active:shadow-xl transition-all duration-500 overflow-hidden transform hover:scale-105 active:scale-95 hover:-rotate-1 animate-on-scroll">
                     <div class="relative h-40 sm:h-48 overflow-hidden">
                         <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop" 
                              alt="E-commerce Platform" 
-                             class="object-cover w-full h-full transition-transform duration-700 hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                             class="object-cover w-full h-full transition-transform duration-700 hover:scale-110 active:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 active:opacity-80 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-base sm:text-lg font-semibold text-slate-800 animate-slide-in-left">E-commerce Platform</h4>
-                            <i data-lucide="external-link" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 hover:text-slate-600 cursor-pointer transition-all duration-300 transform hover:scale-125 animate-bounce-slow"></i>
+                            <i data-lucide="external-link" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 hover:text-slate-600 active:text-slate-700 cursor-pointer transition-all duration-300 transform hover:scale-125 active:scale-110 animate-bounce-slow"></i>
                         </div>
                         <p class="text-xs sm:text-sm text-slate-600 mb-4 animate-fade-in">A full-stack e-commerce solution built with React and Node.js</p>
                         <div class="flex flex-wrap gap-1 sm:gap-2">
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-blue-100 hover:border-blue-300 animate-scale-in">React</span>
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-green-100 hover:border-green-300 animate-scale-in">Node.js</span>
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-purple-100 hover:border-purple-300 animate-scale-in">MongoDB</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-blue-100 active:bg-blue-200 hover:border-blue-300 animate-scale-in">React</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-green-100 active:bg-green-200 hover:border-green-300 animate-scale-in">Node.js</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-purple-100 active:bg-purple-200 hover:border-purple-300 animate-scale-in">MongoDB</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Project 2 -->
-                <div class="project-card bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-rotate-1 animate-on-scroll">
+                <div class="project-card bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-2xl active:shadow-xl transition-all duration-500 overflow-hidden transform hover:scale-105 active:scale-95 hover:-rotate-1 animate-on-scroll">
                     <div class="relative h-40 sm:h-48 overflow-hidden">
                         <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop" 
                              alt="Task Management App" 
-                             class="object-cover w-full h-full transition-transform duration-700 hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                             class="object-cover w-full h-full transition-transform duration-700 hover:scale-110 active:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 active:opacity-80 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-base sm:text-lg font-semibold text-slate-800 animate-slide-in-left">Task Management App</h4>
-                            <i data-lucide="external-link" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 hover:text-slate-600 cursor-pointer transition-all duration-300 transform hover:scale-125 animate-bounce-slow"></i>
+                            <i data-lucide="external-link" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 hover:text-slate-600 active:text-slate-700 cursor-pointer transition-all duration-300 transform hover:scale-125 active:scale-110 animate-bounce-slow"></i>
                         </div>
                         <p class="text-xs sm:text-sm text-slate-600 mb-4 animate-fade-in">A collaborative task management application with real-time updates</p>
                         <div class="flex flex-wrap gap-1 sm:gap-2">
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-green-100 hover:border-green-300 animate-scale-in">Vue.js</span>
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-yellow-100 hover:border-yellow-300 animate-scale-in">Firebase</span>
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-teal-100 hover:border-teal-300 animate-scale-in">Tailwind CSS</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-green-100 active:bg-green-200 hover:border-green-300 animate-scale-in">Vue.js</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-yellow-100 active:bg-yellow-200 hover:border-yellow-300 animate-scale-in">Firebase</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-teal-100 active:bg-teal-200 hover:border-teal-300 animate-scale-in">Tailwind CSS</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Project 3 -->
-                <div class="project-card bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-rotate-1 animate-on-scroll">
+                <div class="project-card bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-2xl active:shadow-xl transition-all duration-500 overflow-hidden transform hover:scale-105 active:scale-95 hover:-rotate-1 animate-on-scroll">
                     <div class="relative h-40 sm:h-48 overflow-hidden">
                         <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=400&h=300&fit=crop" 
                              alt="Portfolio Website" 
-                             class="object-cover w-full h-full transition-transform duration-700 hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                             class="object-cover w-full h-full transition-transform duration-700 hover:scale-110 active:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 active:opacity-80 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-base sm:text-lg font-semibold text-slate-800 animate-slide-in-left">Portfolio Website</h4>
-                            <i data-lucide="external-link" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 hover:text-slate-600 cursor-pointer transition-all duration-300 transform hover:scale-125 animate-bounce-slow"></i>
+                            <i data-lucide="external-link" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 hover:text-slate-600 active:text-slate-700 cursor-pointer transition-all duration-300 transform hover:scale-125 active:scale-110 animate-bounce-slow"></i>
                         </div>
                         <p class="text-xs sm:text-sm text-slate-600 mb-4 animate-fade-in">A responsive portfolio website showcasing web development skills</p>
                         <div class="flex flex-wrap gap-1 sm:gap-2">
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-orange-100 hover:border-orange-300 animate-scale-in">HTML</span>
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-blue-100 hover:border-blue-300 animate-scale-in">CSS</span>
-                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-yellow-100 hover:border-yellow-300 animate-scale-in">JavaScript</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-orange-100 active:bg-orange-200 hover:border-orange-300 animate-scale-in">HTML</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-blue-100 active:bg-blue-200 hover:border-blue-300 animate-scale-in">CSS</span>
+                            <span class="border border-slate-300 text-slate-700 text-xs px-2 py-1 rounded transition-all duration-300 hover:bg-yellow-100 active:bg-yellow-200 hover:border-yellow-300 animate-scale-in">JavaScript</span>
                         </div>
                     </div>
                 </div>
@@ -741,7 +854,7 @@
                 <div class="order-2 lg:order-1 animate-on-scroll">
                     <h3 class="text-xl sm:text-2xl font-semibold text-slate-800 mb-6 animate-slide-in-left">Let's Connect</h3>
                     <div class="space-y-4 sm:space-y-6">
-                        <div class="flex items-center space-x-4 transform hover:translate-x-2 transition-transform duration-300">
+                        <div class="flex items-center space-x-4 transform hover:translate-x-2 active:translate-x-1 transition-transform duration-300">
                             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 animate-bounce-slow">
                                 <i data-lucide="mail" class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"></i>
                             </div>
@@ -751,7 +864,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-4 transform hover:translate-x-2 transition-transform duration-300">
+                        <div class="flex items-center space-x-4 transform hover:translate-x-2 active:translate-x-1 transition-transform duration-300">
                             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 animate-bounce-slow">
                                 <i data-lucide="phone" class="w-5 h-5 sm:w-6 sm:h-6 text-green-600"></i>
                             </div>
@@ -761,7 +874,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-4 transform hover:translate-x-2 transition-transform duration-300">
+                        <div class="flex items-center space-x-4 transform hover:translate-x-2 active:translate-x-1 transition-transform duration-300">
                             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 animate-bounce-slow">
                                 <i data-lucide="map-pin" class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600"></i>
                             </div>
@@ -775,17 +888,17 @@
                     <div class="mt-6 sm:mt-8">
                         <h4 class="text-base sm:text-lg font-medium text-slate-800 mb-4 animate-slide-in-left">Follow Me</h4>
                         <div class="flex space-x-3 sm:space-x-4">
-                            <button class="w-10 h-10 sm:w-12 sm:h-12 border border-slate-300 rounded-lg hover:bg-slate-50 transition-all duration-300 flex items-center justify-center transform hover:scale-110 hover:rotate-12 animate-float">
+                            <button class="w-10 h-10 sm:w-12 sm:h-12 border border-slate-300 rounded-lg hover:bg-slate-50 active:bg-slate-100 transition-all duration-300 flex items-center justify-center transform hover:scale-110 active:scale-95 hover:rotate-12 animate-float">
                                 <i data-lucide="github" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                             </button>
-                            <button class="w-10 h-10 sm:w-12 sm:h-12 border border-slate-300 rounded-lg hover:bg-slate-50 transition-all duration-300 flex items-center justify-center transform hover:scale-110 hover:rotate-12 animate-float">
+                            <button class="w-10 h-10 sm:w-12 sm:h-12 border border-slate-300 rounded-lg hover:bg-slate-50 active:bg-slate-100 transition-all duration-300 flex items-center justify-center transform hover:scale-110 active:scale-95 hover:rotate-12 animate-float">
                                 <i data-lucide="linkedin" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="order-1 lg:order-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl transition-all duration-500 animate-on-scroll">
+                <div class="order-1 lg:order-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-xl active:shadow-lg transition-all duration-500 animate-on-scroll">
                     <div class="p-4 sm:p-6">
                         <h4 class="text-lg sm:text-xl font-semibold text-slate-800 mb-2 animate-slide-in-right">Send a Message</h4>
                         <p class="text-sm sm:text-base text-slate-600 mb-6 animate-fade-in">Fill out the form below and I'll get back to you as soon as possible</p>
@@ -794,23 +907,23 @@
                             <div class="animate-slide-in-left">
                                 <label class="block text-sm font-medium text-slate-700 mb-2">Name</label>
                                 <input type="text" name="name" required
-                                       class="w-full px-3 py-2 sm:py-3 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base transition-all duration-300 hover:border-blue-300"
+                                       class="w-full px-3 py-2 sm:py-3 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base transition-all duration-300 hover:border-blue-300 active:border-blue-400"
                                        placeholder="Your Name">
                             </div>
                             <div class="animate-slide-in-right">
                                 <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
                                 <input type="email" name="email" required
-                                       class="w-full px-3 py-2 sm:py-3 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base transition-all duration-300 hover:border-blue-300"
+                                       class="w-full px-3 py-2 sm:py-3 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base transition-all duration-300 hover:border-blue-300 active:border-blue-400"
                                        placeholder="your.email@example.com">
                             </div>
                             <div class="animate-slide-in-left">
                                 <label class="block text-sm font-medium text-slate-700 mb-2">Message</label>
                                 <textarea name="message" rows="4" required
-                                          class="w-full px-3 py-2 sm:py-3 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base resize-none transition-all duration-300 hover:border-blue-300"
+                                          class="w-full px-3 py-2 sm:py-3 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base resize-none transition-all duration-300 hover:border-blue-300 active:border-blue-400"
                                           placeholder="Your message..."></textarea>
                             </div>
                             <button type="submit" 
-                                    class="morph-btn w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 sm:py-3 px-4 rounded-lg transition-all duration-300 text-sm sm:text-base transform hover:scale-105 animate-glow">
+                                    class="morph-btn w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 active:from-blue-800 active:to-purple-800 text-white font-medium py-2 sm:py-3 px-4 rounded-lg transition-all duration-300 text-sm sm:text-base transform hover:scale-105 active:scale-95 animate-glow">
                                 <span class="loading-text">Send Message</span>
                             </button>
                         </form>
@@ -836,31 +949,43 @@
         // Initialize Lucide icons
         lucide.createIcons();
 
-        // Mouse trail effect
-        const mouseTrail = document.getElementById('mouseTrail');
-        let mouseX = 0, mouseY = 0;
-        let trailX = 0, trailY = 0;
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function animateTrail() {
-            trailX += (mouseX - trailX) * 0.1;
-            trailY += (mouseY - trailY) * 0.1;
-            
-            mouseTrail.style.left = trailX + 'px';
-            mouseTrail.style.top = trailY + 'px';
-            
-            requestAnimationFrame(animateTrail);
+        // Force animations on mobile
+        if (isMobile || isTouch) {
+            document.documentElement.style.setProperty('--animation-play-state', 'running');
+            document.body.classList.add('mobile-device');
         }
-        animateTrail();
 
-        // Particle system
+        // Mouse trail effect (desktop only)
+        if (!isMobile && !isTouch) {
+            const mouseTrail = document.getElementById('mouseTrail');
+            let mouseX = 0, mouseY = 0;
+            let trailX = 0, trailY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function animateTrail() {
+                trailX += (mouseX - trailX) * 0.1;
+                trailY += (mouseY - trailY) * 0.1;
+                
+                mouseTrail.style.left = trailX + 'px';
+                mouseTrail.style.top = trailY + 'px';
+                
+                requestAnimationFrame(animateTrail);
+            }
+            animateTrail();
+        }
+
+        // Particle system (optimized for mobile)
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
+            const particleCount = isMobile ? 20 : 50; // Reduce particles on mobile
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
@@ -874,26 +999,27 @@
             }
         }
 
-        // Matrix rain effect
+        // Matrix rain effect (simplified for mobile)
         function createMatrixRain() {
             const matrixContainer = document.getElementById('matrixRain');
             const chars = '01';
-            const columns = Math.floor(window.innerWidth / 20);
+            const columns = Math.floor(window.innerWidth / (isMobile ? 30 : 20)); // Wider spacing on mobile
 
             for (let i = 0; i < columns; i++) {
                 const column = document.createElement('div');
                 column.style.position = 'absolute';
-                column.style.left = i * 20 + 'px';
+                column.style.left = i * (isMobile ? 30 : 20) + 'px';
                 column.style.top = '0';
-                column.style.width = '20px';
+                column.style.width = (isMobile ? 30 : 20) + 'px';
                 column.style.height = '100%';
 
-                for (let j = 0; j < 20; j++) {
+                const charCount = isMobile ? 10 : 20; // Fewer characters on mobile
+                for (let j = 0; j < charCount; j++) {
                     const char = document.createElement('div');
                     char.className = 'matrix-char';
                     char.textContent = chars[Math.floor(Math.random() * chars.length)];
                     char.style.left = '0';
-                    char.style.top = j * 20 + 'px';
+                    char.style.top = j * (isMobile ? 30 : 20) + 'px';
                     char.style.animationDelay = Math.random() * 3 + 's';
                     char.style.animationDuration = (Math.random() * 2 + 2) + 's';
                     column.appendChild(char);
@@ -950,16 +1076,20 @@
             }
         });
 
-        // Intersection Observer for scroll animations
+        // Intersection Observer for scroll animations (optimized for mobile)
         const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            threshold: isMobile ? 0.05 : 0.1, // Lower threshold for mobile
+            rootMargin: isMobile ? '0px 0px -20px 0px' : '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animated');
+                    // Force reflow on mobile to ensure animations trigger
+                    if (isMobile) {
+                        entry.target.offsetHeight;
+                    }
                 }
             });
         }, observerOptions);
@@ -969,27 +1099,34 @@
             observer.observe(el);
         });
 
-        // Animate skill bars on scroll
+        // Animate skill bars on scroll (mobile optimized)
         function animateSkillBars() {
             const skillBars = document.querySelectorAll('.skill-bar');
             const skillObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const width = entry.target.getAttribute('data-width');
+                        const delay = isMobile ? 100 : 300; // Faster on mobile
                         setTimeout(() => {
                             entry.target.style.width = width + '%';
-                        }, 300);
+                            // Force repaint on mobile
+                            if (isMobile) {
+                                entry.target.style.transform = 'translateZ(0)';
+                            }
+                        }, delay);
                     }
                 });
-            }, { threshold: 0.5 });
+            }, { threshold: isMobile ? 0.3 : 0.5 });
 
             skillBars.forEach(bar => {
                 skillObserver.observe(bar);
             });
         }
 
-        // Parallax effect
+        // Parallax effect (disabled on mobile for performance)
         function handleParallax() {
+            if (isMobile) return; // Skip parallax on mobile
+            
             const scrolled = window.pageYOffset;
             const parallaxElements = document.querySelectorAll('.parallax');
             
@@ -1000,17 +1137,19 @@
             });
         }
 
-        // Add hover effects to navigation links
+        // Add hover effects to navigation links (touch-friendly)
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-                this.style.textShadow = '0 2px 4px rgba(0,0,0,0.1)';
-            });
-            
-            link.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-                this.style.textShadow = 'none';
-            });
+            if (!isMobile) {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.textShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                });
+                
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.textShadow = 'none';
+                });
+            }
         });
 
         // Contact form handling with animation
@@ -1074,8 +1213,10 @@
             createMatrixRain();
             animateSkillBars();
             
-            // Add scroll event listener for parallax
-            window.addEventListener('scroll', handleParallax);
+            // Add scroll event listener for parallax (desktop only)
+            if (!isMobile) {
+                window.addEventListener('scroll', handleParallax);
+            }
             
             // Add loading animation to page
             document.body.style.opacity = '0';
@@ -1083,20 +1224,40 @@
                 document.body.style.transition = 'opacity 1s ease-in-out';
                 document.body.style.opacity = '1';
             }, 100);
+
+            // Force animations to start on mobile
+            if (isMobile) {
+                setTimeout(() => {
+                    document.querySelectorAll('.animate-float, .animate-pulse-slow, .animate-bounce-slow').forEach(el => {
+                        el.style.animationPlayState = 'running';
+                        el.style.webkitAnimationPlayState = 'running';
+                    });
+                }, 500);
+            }
         });
 
-        // Add some interactive effects
+        // Add interactive effects (mobile optimized)
         document.querySelectorAll('.skill-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.05) rotateY(5deg)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1) rotateY(0deg)';
-            });
+            if (isMobile) {
+                card.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                card.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            } else {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05) rotateY(5deg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) rotateY(0deg)';
+                });
+            }
         });
 
-        // Add click effects to buttons
+        // Add click effects to buttons (mobile optimized)
         document.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', function() {
                 this.style.transform = 'scale(0.95)';
@@ -1104,9 +1265,22 @@
                     this.style.transform = 'scale(1)';
                 }, 150);
             });
+
+            // Add touch feedback for mobile
+            if (isMobile) {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 100);
+                });
+            }
         });
 
-        // Add typing effect to hero text
+        // Add typing effect to hero text (mobile optimized)
         function typeWriter(element, text, speed = 100) {
             let i = 0;
             element.innerHTML = '';
@@ -1115,7 +1289,7 @@
                 if (i < text.length) {
                     element.innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(type, speed);
+                    setTimeout(type, isMobile ? speed * 0.7 : speed); // Faster on mobile
                 }
             }
             type();
@@ -1125,22 +1299,33 @@
         setTimeout(() => {
             const heroText = document.querySelector('.typewriter');
             if (heroText) {
-                typeWriter(heroText, 'Web Developer', 150);
+                typeWriter(heroText, 'Web Developer', isMobile ? 100 : 150);
             }
-        }, 2000);
+        }, isMobile ? 1000 : 2000); // Start sooner on mobile
 
-        // Add glitch effect on hover to profile picture
-        document.querySelector('.animate-float img').addEventListener('mouseenter', function() {
-            this.style.filter = 'none';
-            this.style.transform = 'scale(1.05)';
-        });
+        // Add profile picture hover effect (mobile optimized)
+        const profileImg = document.querySelector('.animate-float img');
+        if (profileImg) {
+            if (isMobile) {
+                profileImg.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                profileImg.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            } else {
+                profileImg.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
 
-        document.querySelector('.animate-float img').addEventListener('mouseleave', function() {
-            this.style.filter = 'none';
-            this.style.transform = 'scale(1)';
-        });
+                profileImg.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            }
+        }
 
-        // Performance optimization: Throttle scroll events
+        // Performance optimization: Throttle scroll events (desktop only)
         function throttle(func, limit) {
             let inThrottle;
             return function() {
@@ -1154,8 +1339,49 @@
             }
         }
 
-        // Apply throttling to scroll events
-        window.addEventListener('scroll', throttle(handleParallax, 16));
+        // Apply throttling to scroll events (desktop only)
+        if (!isMobile) {
+            window.addEventListener('scroll', throttle(handleParallax, 16));
+        }
+
+        // Mobile-specific optimizations
+        if (isMobile) {
+            // Reduce animation duration for better performance
+            document.documentElement.style.setProperty('--animation-duration-fast', '0.3s');
+            document.documentElement.style.setProperty('--animation-duration-normal', '0.5s');
+            document.documentElement.style.setProperty('--animation-duration-slow', '0.8s');
+
+            // Add touch feedback class
+            document.body.classList.add('touch-device');
+
+            // Optimize viewport for mobile
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+        }
+
+        // Force hardware acceleration on mobile
+        if (isMobile) {
+            const animatedElements = document.querySelectorAll('.animate-float, .animate-pulse-slow, .animate-bounce-slow, .skill-bar, .particle');
+            animatedElements.forEach(el => {
+                el.style.transform = 'translateZ(0)';
+                el.style.backfaceVisibility = 'hidden';
+                el.style.perspective = '1000px';
+            });
+        }
+
+        // Debug: Log if animations are working on mobile
+        if (isMobile) {
+            console.log('Mobile device detected - animations optimized');
+            setTimeout(() => {
+                const floatingElement = document.querySelector('.animate-float');
+                if (floatingElement) {
+                    const computedStyle = window.getComputedStyle(floatingElement);
+                    console.log('Animation status:', computedStyle.animationPlayState);
+                }
+            }, 2000);
+        }
     </script>
 </body>
 </html>
